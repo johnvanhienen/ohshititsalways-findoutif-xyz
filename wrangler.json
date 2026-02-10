@@ -1,0 +1,14 @@
+{
+  "name": "ohshititsalways",
+  "compatibility_date": "2026-02-10",
+  "main": "functions/_worker.js",
+  "assets": {
+    "directory": "./"
+  },
+  "r2_buckets": [
+    {
+      "binding": "R2_BUCKET",
+      "bucket_name": "ohshititsalways-findoutif-xyz"
+    }
+  ]
+}

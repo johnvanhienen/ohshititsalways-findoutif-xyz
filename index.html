@@ -168,6 +168,23 @@
             transform: scale(0.98);
         }
 
+        .clear-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #8892b0;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+        }
+
+        .clear-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
         .flash {
             animation: flash 0.5s ease;
         }
@@ -342,6 +359,41 @@
             return getCounterData(id).count || 0;
         }
 
+        // ROT13 obfuscated password: grfvzcrybasvrg
+        function rot13(str) {
+            return str.replace(/[a-zA-Z]/g, c => 
+                String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
+            );
+        }
+
+        async function clearCounter(id) {
+            const password = prompt('Enter admin password to clear stats:');
+            if (!password) return;
+            
+            // grfvzcrybasvrg = tesimpelofniet in ROT13
+            if (password !== rot13('grfvzcrybasvrg')) {
+                alert('Wrong password!');
+                return;
+            }
+            
+            const data = getCounterData(id);
+            data.lastReset = Date.now();
+            data.count = 0;
+            data.history = [];
+            
+            await saveData();
+            
+            // Update stats display
+            document.getElementById(`month-${id}`).textContent = 0;
+            document.getElementById(`year-${id}`).textContent = 0;
+            document.getElementById(`total-${id}`).textContent = 0;
+            updateTotalIncidents();
+            
+            const card = document.querySelector(`[data-id="${id}"]`);
+            card.classList.add('flash');
+            setTimeout(() => card.classList.remove('flash'), 500);
+        }
+
         async function resetCounter(id) {
             const data = getCounterData(id);
             data.lastReset = Date.now();
@@ -419,9 +471,14 @@
                                 <div class="stat-label">All Time</div>
                             </div>
                         </div>
-                        <button class="reset-btn" onclick="resetCounter('${counter.id}')">
-                            🔥 It Happened Again
-                        </button>
+                        <div class="button-group">
+                            <button class="reset-btn" onclick="resetCounter('${counter.id}')">
+                                🔥 It Happened Again
+                            </button>
+                            <button class="clear-btn" onclick="clearCounter('${counter.id}')">
+                                🗑️ Clear Stats
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');

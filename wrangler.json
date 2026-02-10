@@ -1,9 +1,10 @@
 {
-  "name": "ohshititsalways",
+  "name": "ohshititsalways-findoutif-xyz",
   "compatibility_date": "2026-02-10",
   "main": "functions/_worker.js",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "exclude": [".git", ".wrangler", "functions", "wrangler.json"]
   },
   "r2_buckets": [
     {

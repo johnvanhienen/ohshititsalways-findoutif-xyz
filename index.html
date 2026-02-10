@@ -359,7 +359,6 @@
             return getCounterData(id).count || 0;
         }
 
-        // ROT13 obfuscated password: grfvzcrybasvrg
         function rot13(str) {
             return str.replace(/[a-zA-Z]/g, c => 
                 String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
@@ -370,8 +369,7 @@
             const password = prompt('Enter admin password to clear stats:');
             if (!password) return;
             
-            // grfvzcrybasvrg = tesimpelofniet in ROT13
-            if (password !== rot13('grfvzcrybasvrg')) {
+            if (rot13(password) !== 'grfvzcrybasvrg') {
                 alert('Wrong password!');
                 return;
             }
